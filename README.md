@@ -13,7 +13,7 @@ Without Page Objects
       @selenium.type "username", "monkey"
       @selenium.type "password", "buttress"
       @selenium.click "submit", :wait_for => :page
-      assert_equal @selenium.get_text("css=div.error > p"), "Incorrect username or password."
+      @selenium.get_text("css=div.error > p").should == "Incorrect username or password."
     end
 
 With Page Objects
