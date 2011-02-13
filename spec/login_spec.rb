@@ -4,7 +4,7 @@ require 'home_page'
 module SauceWebsite
   describe "Login" do
     context "invalid password" do
-      it "prints error message" do
+      it "prints error message", :depth => 'deep', :login => true do
         @home = PageObjects::HomePage.new
         @login = @home.goto_login_form
         @login.username = "foo"
@@ -15,7 +15,7 @@ module SauceWebsite
       end
     end
     
-    context "correct password" do
+    context "correct password", :depth => 'shallow', :login => true do
       # if there is no block passed then it is 'pending
       it "goes to account page"
     end

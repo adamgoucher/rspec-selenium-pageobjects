@@ -137,9 +137,31 @@ It's a lot to type, and pretty yucky looking, but you don't need to look at it v
 
 Also notice that selenium.yml is not committed but selenium.yml.default is. This is me blatantly borrowing good ideas the from the RoR kids. As you'll see with the CI integration, it allows for easy parallel, cross-browser script execution without the need to get Se-Grid involved.
 
+Tags
+----
+
+The selenium-webdriver gem is darn near idiomatically perfect for dealing with synchronization but I had a hard time recommending it to people as none of the Ruby test runners were able to handle test discovery via tags. But apparently RSpec grew this ability last July and the runner caught up in November.
+
+Tags solve the venn diagram problem of where to put a script. Selenium scripts cross boundaries that 'unit' scripts don't have to worry about so we often find ourselves asking: Does it go with the admin persona scripts? Or the login ones? Or the smoke tests? Tags lets us not worry about this problem and apply the desired metadata to our scripts.
+
+    context "correct password", :depth => 'shallow', :login => true do
+      it "goes to account page"
+    end
+
+In this example there are two tags in play. The first is for the depth of the script. I tag everything as either 'deep' or 'shallow'. Shallow scripts are ones that are often called 'smoke' or 'sanity' scripts that but I couldn't figure out a nice opposite value. _shallow_ scripts _must_ pass in order to declare a build testable. To run the 'shallow' test you use
+
+    --tag depth:shallow
+
+The other tag really addresses the venn problem; I wouldn't worry about setting it to false if it isn't applicable -- just don't add it.
+
+    --tag login
+
+And you can have multiple tags when calling the runner too in order to narrow down what you are looking for.
+
+    --tag depth:shallow --tag login
+
 TO-DO
 -----
-* config files
 * tags
 * ondemand
  * basic
