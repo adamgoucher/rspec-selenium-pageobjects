@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'home_page'
 
-module Checks
+module SauceWebsite
   describe "Login" do
     context "invalid password" do
       it "prints error message" do
