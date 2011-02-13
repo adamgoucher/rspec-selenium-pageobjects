@@ -111,19 +111,43 @@ RSpec is an xUnit style framework which means it has methods that are called bef
       }
     }
 
-There is also :suite and :all available if there were things you wanted to do at those points as well.
+There is also :suite and :all available if there were things you wanted to do at those points as well. Like, say, reading config files.
 
+Config Files
+------------
+
+The default config format for Ruby (thanks to the Rails kids) is YAML so we'll drive the config from there. So as alluded to above, the before(:all) is a nice way to load things.
+
+    c.before(:all) {
+      @config = SeleniumHelpers::Configuration.instance.config
+    }
+
+But wait, that's another singleton. Will the madness ever end? The reason for this is that Page Objects, scripts, helpers and oracles all need to be able to access the information tucked away in these configs. The first thing to be driven from a file is the initial server connection.
+
+    def initialize
+      @connection = Selenium::Client::Driver.new \
+                      :host => SeleniumHelpers::Configuration.instance.config['selenium']['host'],
+                      :port => SeleniumHelpers::Configuration.instance.config['selenium']['port'],
+                      :browser => SeleniumHelpers::Configuration.instance.config['selenium']['browser'],
+                      :url => SeleniumHelpers::Configuration.instance.config['selenium']['base_url'],
+                      :timeout_in_second => SeleniumHelpers::Configuration.instance.config['selenium']['timeout']
+    end
+    
+It's a lot to type, and pretty yucky looking, but you don't need to look at it very often.
+
+Also notice that selenium.yml is not committed but selenium.yml.default is. This is me blatantly borrowing good ideas the from the RoR kids. As you'll see with the CI integration, it allows for easy parallel, cross-browser script execution without the need to get Se-Grid involved.
 
 TO-DO
 -----
 * config files
 * tags
 * ondemand
-** basic
-** tagging
-** fetch video
-** fetch logs
+ * basic
+ * tagging
+ * fetch video
+ * fetch logs
 * logging
+* ci integration
 * random data
 * data driving
 * soft asserts (custom expectations)

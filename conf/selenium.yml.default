@@ -1,0 +1,7 @@
+selenium:
+  host: localhost 
+  port: 4444
+  # yaml doesn't like the * so need the quotes
+  browser: "*firefox"
+  base_url: http://saucelabs.com
+  timeout: 20
