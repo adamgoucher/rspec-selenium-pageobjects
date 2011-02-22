@@ -159,10 +159,63 @@ The other tag really addresses the venn problem; I wouldn't worry about setting 
 And you can have multiple tags when calling the runner too in order to narrow down what you are looking for.
 
     --tag depth:shallow --tag login
+    
+Synchronization
+---------------
+
+    One of the nice things about the Ruby drivers for Selenium is its idiomatically correct handling of synchronization using :wait_for after an event. Such as:
+
+        se.click "a_locator", :wait_for => :page
+
+    In general there are three different types os synchronization events.
+
+    1. Web 1.0 - these events are ones where there is a a page or window reload as a result of an action in the browser.
+        :wait_for => :page
+        :wait_for => :popup, :window => 'a window id'
+
+    2. Web 2.0 - with the rise of AJAX and related technologies we can no longer rely on the browser being reloaded. Now we need to be a bit more tricky about things looking at whether the content itself has changed.
+
+    By default these have hooks for prototype; override this using :javascript_framework
+
+        :wait_for => :ajax
+
+    is the same as
+
+        :wait_for => :ajax, :javascript_framework => :prototype
+
+    :javascript_framework can also be set when you make the connection to the server so that you don't have to remember to type it every single time
+
+        :wait_for => :ajax, :javascript_framework => :jquery
+        :wait_for => :effects
+        :wait_for => :effects, :javascript_framework => :jquery
+
+    The rest of the Web 2.0 synchronization hooks deal with the page content directly. The first four are the ones most often used
+
+        :wait_for => :element, :element => 'new_element_id'
+        :wait_for => :no_element, :element => 'new_element_id'
+        :wait_for => :visible, :element => 'a_locator'
+        :wait_for => :not_visible, :element => 'a_locator'
+        :wait_for => :text, :text => 'some text'
+        :wait_for => :text, :text => /A Regexp/
+        :wait_for => :text, :element => 'a_locator', :text => 'some text'
+        :wait_for => :text, :element => 'a_locator', :text => /A Regexp/
+        :wait_for => :no_text, :text => 'some text'
+        :wait_for => :no_text, :text => /A Regexp/
+        :wait_for => :no_text, :element => 'a_locator', :text => 'some text'
+        :wait_for => :no_text, :element => 'a_locator', :text => /A Regexp/
+        :wait_for => :value, :element => 'a_locator', :value => 'some value'
+        :wait_for => :no_value, :element => 'a_locator', :value => 'some value'
+        :wait_for => :visible, :element => 'a_locator'
+        :wait_for => :not_visible, :element => 'a_locator'
+
+    3. Web 3.0 - Some sites have just a ridiculous amount of background services being checked, AJAX messages sent back and forth, use Comet events so things like :ajax don't ever end. For this you need to use a (Latch)[FINDME].
+
+        :wait_for => :condition, :javascript => 'latch condition'
+
+    All :wait_for expressions can also have and explicit timeout (:timeout_in_seconds key). Otherwise the default driver timeout is used (30s). This value can also be set at server connection.
 
 TO-DO
 -----
-* tags
 * ondemand
  * basic
  * tagging
