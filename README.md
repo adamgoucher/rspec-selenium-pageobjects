@@ -214,6 +214,60 @@ Synchronization
 
     All :wait_for expressions can also have and explicit timeout (:timeout_in_seconds key). Otherwise the default driver timeout is used (30s). This value can also be set at server connection.
 
+Expectations
+------------
+
+RSpec doesn't use the word _assert_; instead they prefer _expectation_. There are two basic ways of setting up an expectation in RSpec
+
+    * should
+    * should_not
+
+Each of these will take either an RSpec _matcher_ or a Ruby expression. And through some tricky meta-programming, each of these is available on all objects.
+
+Ruby expressions that evaluate for should or should_not are pretty easy to grasp and use the standard comparison operators. The exception here is != which RSpec does not support. This means
+
+    foo.should != 'bar'
+
+needs to be rewritten as
+
+    foo.should_not == 'bar'
+
+There is deep Ruby internal reasons for this, but it also just reads nicer. What would be even nicer is to do away with the == altogether and use a built-in matcher such as
+
+* equal
+* include
+* respond_to
+* raise error
+
+Which would give us
+
+    foo.should_not equal('bar')
+
+Creating Se scripts will result in a lot of _should_ and _should_not_ expectations and very few of the others. Remember, RSpec was designed as a code-level BDD framework first so its features reflect its heritage.
+
+Matcher Magic
+-------------
+
+One thing I like about Ruby that I wish Python would copy is its notion of predicates which are methods whose name ends in ? and return True or False. If you have a matcher that starts with be_ it will call the predicate function that makes up the rest of the matcher.
+
+Imagine you had a 
+
+    class Person
+      def admin?
+        if self.role == :admin
+          True
+        else
+          False
+        end
+      end
+    end
+
+You could then do
+
+    p.should_not be_admin
+
+The same magic happens with matchers that start with have_ for functions that begin with has_.
+
 TO-DO
 -----
 * ondemand
