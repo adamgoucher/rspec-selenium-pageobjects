@@ -328,7 +328,24 @@ CI integration is almost always accomplished by the mythical 'JUnit' xml which i
 
     --require GEM_PATH/lib/ci/reporter/rake/rspec_loader --format CI::Reporter::RSpec
     
-The reports that it produces will be in the specs/reports directory so you need to specify that dir in the CI job's config as the location. It is likely also a good idea to archive those as well
+The reports that it produces will be in the specs/reports directory so you need to specify that dir in the CI job's config as the location. It is likely also a good idea to archive those as well.
+
+Soft Shoulds
+------------
+
+Users of Se-IDE are familiar with the notion of 'hard' asserts (assert*) and 'soft' asserts (verify*). RSpec has only the notion of should (and should_not) that will stop an example immediately on fail. And that makes sense in a pure RSpec world, but not so much the Se one so we do the standard kludge of catching ExpectationNotMetError and adding it to an Array then checking that the array is empty.
+
+    begin
+      @login.error_message.should == "Incofrrect username or password."
+    rescue RSpec::Expectations::ExpectationNotMetError => verification_error
+      @validation_errors << verification_error
+    end
+
+is what a soft 'should' looks like in our scripts. And then the check of course looks like 
+
+    @validation_errors.should be_empty
+    
+What would be be nice is if someone wrote a _might_ or _oughta_ which would do the script facing side cleaner. Someone other than me of course. :)
 
 TO-DO
 -----
@@ -340,6 +357,5 @@ TO-DO
 * logging
 * ci integration
 * random data
-* soft asserts (custom expectations)
 * custom matchers
 * custom exceptions

@@ -21,6 +21,6 @@ RSpec.configure { |c|
 
   c.after(:each) {
     @browser.close_current_browser_session
-    @validation_errors.should_not have_errors
+    @validation_errors.should be_empty
   }
 }
