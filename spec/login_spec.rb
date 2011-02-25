@@ -4,6 +4,7 @@ require 'home_page'
 require 'providers'
 include Providers::Static
 include Providers::CSV
+include Providers::MySQL
 
 module SauceWebsite
   describe "Logging in" do
@@ -47,6 +48,19 @@ module SauceWebsite
             # 'expectation'
             @login.error_message.should == "Incorrect username or password."
           end
+        end
+      end
+      
+      context "using a mysql provider" do
+        it "prints error message", :depth => 'deep',
+                                   :login => true do
+          provider = Providers::Database::MySQL.new
+          provided_info = provider.random_row
+          @login.username = provided_info[0]
+          @login.password = provided_info[1]
+          @login.login
+          # 'expectation'
+          @login.error_message.should == "Please enter your member name again. Please check your spelling or register for an account."
         end
       end
     end

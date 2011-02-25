@@ -298,6 +298,13 @@ One useful thing to do with CSV data is to return a random row rather than a spe
     def random_row
       @csv_content[rand(csv_content.size)]
     end
+
+3. _Database_ - A powerful way of driving your scripts is to use the information that is in your application already. In some cases you can use the native ORM (such as ActiveRecord) but other times you need to go directly at the database.
+
+    def random_username_and_password
+      res = @dbh.query("select username, password from provider order by rand() limit 1")
+      res.fetch_row
+    end
  
 TO-DO
 -----
@@ -309,7 +316,6 @@ TO-DO
 * logging
 * ci integration
 * random data
-* data driving
 * soft asserts (custom expectations)
 * custom matchers
 * custom exceptions

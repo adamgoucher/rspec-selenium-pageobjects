@@ -5,3 +5,9 @@ selenium:
   browser: "*firefox"
   base_url: http://saucelabs.com
   timeout: 20
+  
+mysql:
+  host: localhost
+  user: root
+  password: ""
+  database: userpassword
