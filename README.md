@@ -315,6 +315,21 @@ Unlike some frameworks, like Nose for Python, there is no way in RSpec to 'skip'
       pending("except its not Monday")
     end
 
+Continuous Integration
+----------------------
+
+I recommend that people use something like (Jenkins)[http://jenkins-ci.com] to run all their Se scripts, including ones that they might naturally us something like Se-Grid for.  But using Jenkins you can..
+* easily, and visually, see what the current status for all the environments is
+* integrate it into a Continuous Delivery process
+* execute a single environment without having to change anything in the scripts or configs
+* run environments you have machines for behind your firewall, and then other ones you can off load to the Sauce Labs OnDemand cloud
+
+CI integration is almost always accomplished by the mythical 'JUnit' xml which is implemented everywhere but not documented anywhere. In order to get RSpec to output this, you need to install the ci_reporter gem. Once you have it on the system you have a couple options though I prefer to include it on the commandline so it is there when I want (in the CI environment) and not when I don't (when I'm creating new scripts).
+
+    --require GEM_PATH/lib/ci/reporter/rake/rspec_loader --format CI::Reporter::RSpec
+    
+The reports that it produces will be in the specs/reports directory so you need to specify that dir in the CI job's config as the location. It is likely also a good idea to archive those as well
+
 TO-DO
 -----
 * ondemand
