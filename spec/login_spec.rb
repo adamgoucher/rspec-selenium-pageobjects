@@ -69,5 +69,12 @@ module SauceWebsite
       # if there is no block passed then it is 'pending
       it "goes to account page"
     end
+    
+    context "does magic on Mondays" do
+      if Time.new.strftime("%A") != "Monday"
+        pending("except its not Monday")
+      end
+      @login.username = provided_info[0]
+    end
   end
 end

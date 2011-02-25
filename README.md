@@ -305,7 +305,16 @@ One useful thing to do with CSV data is to return a random row rather than a spe
       res = @dbh.query("select username, password from provider order by rand() limit 1")
       res.fetch_row
     end
- 
+
+Skipping Examples
+-----------------
+
+Unlike some frameworks, like Nose for Python, there is no way in RSpec to 'skip' an example, you can however make it as Pending programatically.
+
+    if Time.new.strftime("%A") != "Monday"
+      pending("except its not Monday")
+    end
+
 TO-DO
 -----
 * ondemand
