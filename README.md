@@ -113,6 +113,17 @@ RSpec is an xUnit style framework which means it has methods that are called bef
 
 There is also :suite and :all available if there were things you wanted to do at those points as well. Like, say, reading config files.
 
+What is really cool about before/after is they can be nested inside layers of describe and context blocks and will execute from furthest out in.
+
+    describe "foo" do
+      before(:each) do
+        p 'a'
+      end
+      describe "bar" do
+        before 'a' do
+          p 'a'
+        end
+
 Config Files
 ------------
 
@@ -268,6 +279,26 @@ You could then do
 
 The same magic happens with matchers that start with have_ for functions that begin with has_.
 
+Providers
+---------
+
+Test 'data' should not be embedded in your script. Doing so means that you have to edit your script whenever the data changes. To solve this particular problem we can use a number of different 'providers' of information.
+
+1. _Static_ - A Static provider is one which will return a data that is contained in its own class definition. It is somewhat akin to putting the data right in the script except that when it changes, it is only this data file that needs to be edited.
+
+    @user = {
+      "username" => "flying",
+      "password" => "monkey"
+    }
+
+2. _CSV_ - The next step from the Static provider is to feed the information from a CSV file. This data can be as simple as usernames and password (like this example) or as complicated as the most efficient pair-wise paths from something like (Hexawise)[http://hexawise.com].
+
+One useful thing to do with CSV data is to return a random row rather than a specific one.
+
+    def random_row
+      @csv_content[rand(csv_content.size)]
+    end
+ 
 TO-DO
 -----
 * ondemand
