@@ -1,10 +1,12 @@
 require 'spec_helper'
 require 'home_page'
 
-require 'providers'
+require 'providers/static'
 include Providers::Static
+require 'providers/csv'
 include Providers::CSV
-include Providers::MySQL
+require 'providers/mysql'
+include Providers::Database
 
 module SauceWebsite
   describe "Logging in" do
@@ -70,11 +72,13 @@ module SauceWebsite
       it "goes to account page"
     end
     
-    context "does magic on Mondays" do
-      if Time.new.strftime("%A") != "Monday"
-        pending("except its not Monday")
+    context "skipping examples" do
+      it "does magic on Mondays" do
+        if Time.new.strftime("%A") != "Monday"
+          pending("except its not Monday")
+        end
+        Time.new.strftime("%A").should == "Monday"
       end
-      @login.username = provided_info[0]
     end
   end
 end

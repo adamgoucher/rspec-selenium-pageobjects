@@ -11,3 +11,16 @@ mysql:
   user: root
   password: ""
   database: userpassword
+  
+saucelabs:
+  ondemand: true
+  credentials:
+    username: your_username
+    key: your_key
+  server:
+    host: ondemand.saucelabs.com
+    port: 4444
+  browser:
+    os: windows 2003
+    browser: iexplore
+    version: 8
