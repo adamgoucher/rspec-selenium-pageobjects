@@ -20,6 +20,18 @@ RSpec.configure { |c|
   }
 
   c.after(:each) {
+    if SeleniumHelpers::Configuration.instance.config['saucelabs']['ondemand'] 
+      payload = {
+        :tags => self.example.options.collect{ |k, v|
+                   if v.to_s == 'true'
+                     k
+                   else
+                     "#{k}:#{v}"
+                   end
+                 }
+      }
+      @browser.set_context("sauce: job-info=#{payload.to_json}")
+    end
     @browser.close_current_browser_session
     @validation_errors.should be_empty
   }

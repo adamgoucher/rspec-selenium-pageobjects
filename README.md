@@ -350,7 +350,6 @@ What would be be nice is if someone wrote a _might_ or _oughta_ which would do t
 TO-DO
 -----
 * ondemand
-    * tagging
     * fetch video
     * fetch logs
 * logging
